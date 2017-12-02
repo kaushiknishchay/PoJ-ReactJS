@@ -1,40 +1,39 @@
 import React, {Component} from "react";
 import {withRouter} from "react-router-dom";
-import {fetchData} from "../../fetch.service";
 import {baseUrl} from "../../config.constants";
+import {bindActionCreators} from "redux";
+import {connect} from "react-redux";
+import {album} from "../../actions/album.action";
+import LoadingBar from "../LoadingBar";
 
 class AlbumInfoPage extends Component {
 
 	componentWillMount() {
 		let pMatch = this.props.match;
 
-		if (pMatch !== undefined && pMatch.params !== undefined && pMatch.params.albumKey !== "") {
-			fetchData.getAlbum(this.props.match.params.albumKey)
-					.then(res => {
-						if (res.status === 200 && res.data) {
-							this.setState({
-								albumInfo: res.data
-							});
-							console.log(res.data);
-						}
-
-					})
-					.catch(err => {
-						console.log(err);
-					});
+		if (pMatch !== undefined && pMatch.params !== undefined && pMatch.params.albumKey !== "" && pMatch.params.albumSlug !== undefined) {
+			this.props.getAlbum(pMatch.params.albumKey);
+		} else {
+			this.props.history.push(`/`);
 		}
 	}
 
-	constructor(props) {
-		super(props);
-		this.state = {
-			albumInfo: {}
-		};
+	renderPictures() {
+		if (this.props.albumInfo !== undefined && this.props.albumInfo['photo_url'] !== undefined) {
+			return JSON.parse(this.props.albumInfo['photo_url']).map((album, idx) => {
+				album = baseUrl + album;
+				return (<li key={idx}><img src={album} alt=""/></li>);
+			})
+		} else if (this.props.albumInfoError) {
+			return (<div>Can't load album info.</div>)
+		} else {
+			return (<LoadingBar />);
+		}
 	}
 
 	render() {
 		let wrapperclass = (this.props.className === undefined ? "dark" : this.props.classsName) + "-wrapper";
-		let {albumInfo} = this.state;
+		let {albumInfo} = this.props;
 		return (
 				<div className={wrapperclass}>
 					<div className="container inner2">
@@ -46,17 +45,30 @@ class AlbumInfoPage extends Component {
 						</p>
 						<div className="divide30"/>
 						<ul className="basic-gallery text-center">
-							{albumInfo !== undefined && albumInfo['photo_url'] !== undefined &&
-							JSON.parse(albumInfo['photo_url']).map((album, idx) => {
-								album = baseUrl+album;
-								return (<li key={idx}><img src={album} alt=""/></li>);
-							})
-							}
+							{this.renderPictures()}
 						</ul>
 					</div>
 				</div>
 		)
 	}
+
+
+	componentWillUnmount() {
+		this.props.cleanUp();
+	}
+}
+function mapStateToProps(state) {
+	let album = state.albumReducer;
+	return {
+		albumInfo: album.albumInfo,
+		albumInfoError: album.albumInfoError
+	};
+}
+function mapDispatchToProps(dispatch) {
+	return bindActionCreators({
+		getAlbum: album.getAlbumInfo,
+		cleanUp: album.cleanUp
+	}, dispatch);
 }
 
-export default withRouter(AlbumInfoPage);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(AlbumInfoPage));

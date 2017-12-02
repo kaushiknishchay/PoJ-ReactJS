@@ -18,7 +18,11 @@ class App extends Component {
 						<div className="offset"/>
 						<div>
 							<Route exact path="/" component={HomePage}/>
-							<Route path="/collection/:colKey/:colSlug" component={CollectionPage}/>
+							<Route exact path="/collection" component={CollectionPage}/>
+							<Route exact path="/collection/:colKey" component={CollectionPage}/>
+							<Route exact path="/collection/:colKey/:colSlug" component={CollectionPage}/>
+							<Route exact path="/album" component={AlbumInfoPage}/>
+							<Route exact path="/album/:albumKey" component={AlbumInfoPage}/>
 							<Route path="/album/:albumKey/:albumSlug" component={AlbumInfoPage}/>
 						</div>
 

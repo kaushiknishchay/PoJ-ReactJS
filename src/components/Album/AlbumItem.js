@@ -10,7 +10,7 @@ export default class AlbumItem extends Component {
 					<figure className="icon-overlay">
 						<Link to={"/album/" + albumData.albumkey + "/" + albumData.slug}>
 							<span className="icn-more"/>
-							<img alt="imagesartpf1.jpg" src={baseUrl + albumData.thumb_url}/>
+							<img alt={albumData.name} src={baseUrl + albumData.thumb_url}/>
 						</Link>
 					</figure>
 					<div className="slide-portfolio-item-info box">
