@@ -6,7 +6,7 @@ export default class RecentWorksItem extends Component {
 				<div className="cbp-item">
 					<a className="cbp-caption fancybox-media" data-rel="portfolio" href={this.props.srcFull}
 					   data-title-id={this.props.id}>
-						<div className="cbp-caption-defaultWrap">
+						<div className="cbp-caption-defaultWrap recentImage">
 							<img src={this.props.src} alt=""/>
 						</div>
 						<div className="cbp-caption-activeWrap">

@@ -1,7 +1,10 @@
-import React, {Component} from 'react';
+import React, {Component} from "react";
 import RecentWorksItem from "./RecentWorksItem";
+import {baseUrl} from "../../config.constants";
 
 export default class RecentWorks extends Component {
+
+
 	render() {
 		let wrapperclass = this.props.className + "-wrapper";
 		return (
@@ -14,20 +17,24 @@ export default class RecentWorks extends Component {
 						<div className="divide10"/>
 						<div className="cbp-panel">
 							<div id="js-grid-mosaic" className="cbp">
-								<RecentWorksItem id="title-1" title="Ubi est dexter devatio?" description="Arrr, stormy greed!"
-								                 src="images/art/p1.jpg"
-								                 srcFull="images/art/p1-full.jpg"/>
-								<RecentWorksItem id="title-2" title="Ubi est dexter devatio?" description="Arrr, stormy greed!"
-								                 src="images/art/p3.jpg"
-								                 srcFull="images/art/p3-full.jpg"/>
-								<RecentWorksItem id="title-3" title="Ubi est dexter devatio?" description="Arrr, stormy greed!"
-								                 src="images/art/p2.jpg"
-								                 srcFull="images/art/p2-full.jpg"/>
+								{this.renderRecent()}
 							</div>
 						</div>
 						<div className="divide30"/>
 					</div>
 				</div>
 		)
+	}
+
+	renderRecent() {
+		if (this.props.randomWorks && this.props.randomWorks.length > 0) {
+			return this.props.randomWorks.map((image, idx) => {
+				let img = baseUrl + image;
+				return (
+						<RecentWorksItem key={idx + "recent"} title={idx + "recent"}
+			                 src={img}
+			                 srcFull={img}/>)
+			});
+		}
 	}
 }

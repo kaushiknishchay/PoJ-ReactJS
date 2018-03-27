@@ -8,9 +8,11 @@ import NavBar from "./components/NavBar/NavBarComponent";
 import {Route} from "react-router-dom";
 import HomePage from "./components/HomePage";
 import AlbumInfoPage from "./components/Album/AlbumInfoPage";
+import {PAGE_TITLE} from "./config.constants";
 
 class App extends Component {
 	render() {
+		document.title = PAGE_TITLE;
 		return (
 				<div>
 					<main className="body-wrapper">
